@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Upload, File, Trash2, Eye, CheckCircle, Clock, AlertCircle, Loader2, FileText} from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import axios from "axios";
 
 interface ServiceProps { 
   customerEmail: string
@@ -158,32 +159,74 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
           }
   }; 
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //     e.preventDefault();
+  //     setIsSubmitting(true); 
+  //     const formData = new FormData();
+  //     if (file) {
+  //       formData.append('pdf', file);
+  //     }
+
+  //       try {
+  //         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, {
+  //           method: 'POST',
+  //           //headers: {
+  //           //   'Content-Type': 'application/json',
+  //           // 'Authorization': `Bearer ${userToken}`, // Assuming you have a userToken for authentication
+  //           // },
+  //           body: formData ,
+  //         });
+  
+  //         //const result = await response.json();
+
+  //         if (response.ok) {
+  //           window.alert("upload successful")
+  //         } else {
+  //           ////window.alert("upload failed" + JSON.stringify(response))
+  //           const errorData = await response.json();
+  //           //window.alert("upload failed" + JSON.stringify(response))
+  //           throw new Error(errorData.message || 'Submission failed');
+  //         }
+  //       } catch (error: unknown) {
+  //         let errorMessage = 'Failed to submit inquiry';
+    
+  //         if (error instanceof Error) {
+  //           errorMessage = error.message;
+  //         } else if (typeof error === 'string') {
+  //           errorMessage = error;
+  //         }
+  //         console.error('Submission error:', error);
+           
+  //       } finally {
+  //         setFile(null);
+  //         setUploadName("");
+  //         //setErrors(prev => ({ ...prev, form: errorMessage }));
+  //         setIsSubmitting(false);
+  //         fetchDocs();       
+  //         fetchDocuments();
+  //       }
+  //     };
+
+    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       setIsSubmitting(true); 
       const formData = new FormData();
       if (file) {
-        formData.append('pdf', file);
+        formData.append("file", file);
       }
 
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, {
-            method: 'POST',
-            //headers: {
-            //   'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${userToken}`, // Assuming you have a userToken for authentication
-            // },
-            body: formData ,
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, {
+            formData,
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
           });
-  
-          //const result = await response.json();
 
-          if (response.ok) {
+          if (response.status === 200) {
             window.alert("upload successful")
           } else {
-            ////window.alert("upload failed" + JSON.stringify(response))
-            const errorData = await response.json();
-            //window.alert("upload failed" + JSON.stringify(response))
+            const errorData = await response.data;
             throw new Error(errorData.message || 'Submission failed');
           }
         } catch (error: unknown) {
@@ -333,11 +376,27 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
                       className="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500"
                     >
                       <span>Upload a file</span>
-                      <Input
+                      {/* <Input
                         id="file-upload"
                         name="file-upload"
                         type="file"
                         accept=".pdf"
+                        onChange={(e) => {
+                          const files = e.target.files;
+                          if (files && files.length > 0) {
+                            setFile(files[0]);
+                          } else {
+                            setFile(null);
+                          }
+                        }}
+                        className="sr-only"
+                        disabled={isSubmitting}
+                      /> */}
+                      <Input
+                        id="file-upload"
+                        name="file-upload"
+                        // type="file"
+                        // accept=".pdf"
                         onChange={(e) => {
                           const files = e.target.files;
                           if (files && files.length > 0) {
