@@ -4,8 +4,9 @@ import { useState, ChangeEvent, useEffect} from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
-import { Eye, MessageCircle } from "lucide-react"
+import { Eye, MessageCircle, Loader2, Send } from "lucide-react"
 
 interface ServiceProps {
   // customerId: Number
@@ -32,38 +33,21 @@ interface Services{
 export function MyServices({ customerEmail, onBack }: ServiceProps) {
   const [services, setServices] = useState<Services[]>([]);
   const [loading, setLoading] = useState(true)
-  // const services = [
-  //   {
-  //     id: "CUST001",
-  //     name: "Company Registration",
-  //     status: "In Progress",
-  //     progress: 75,
-  //     priority: "High",
-  //     startDate: "2024-12-15",
-  //     expectedCompletion: "2024-12-30",
-  //     assignedTo: "Legal Team",
-  //   },
-  //   {
-  //     id: "CUST002",
-  //     name: "GST Registration",
-  //     status: "Completed",
-  //     progress: 100,
-  //     priority: "Medium",
-  //     startDate: "2024-12-10",
-  //     expectedCompletion: "2024-12-25",
-  //     assignedTo: "Tax Team",
-  //   },
-  //   {
-  //     id: "CUST003",
-  //     name: "Trademark Registration",
-  //     status: "Pending Documents",
-  //     progress: 30,
-  //     priority: "High",
-  //     startDate: "2024-12-20",
-  //     expectedCompletion: "2025-01-15",
-  //     assignedTo: "IP Team",
-  //   },
-  // ]
+  const [isModalOpen, setIsModalOpen] = useState(false);
+   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [newService, setNewService] = useState({
+      name: "",
+      phone: "",
+      email: "",
+      requirements: ""
+  })
+  const [errors, setErrors] = useState({
+      name: "",
+      email: "",
+      phone: "",
+      requirements: ""
+  })
+    
 
   useEffect(() => {
       fetchServices()
@@ -126,12 +110,215 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
     }
   }
 
+  const validateForm = () => {
+      let isValid = true;
+      const newErrors = { ...errors };
+  
+      // Name validation
+      if (!newService.name.trim()) {
+        newErrors.name = 'Name is required';
+        isValid = false;
+      } else {
+        newErrors.name = '';
+      }
+  
+      // Phone validation
+      const phoneRegex = /^[\d\s\-()+]{10,20}$/;
+      if (!newService.phone) {
+        newErrors.phone = 'Phone number is required';
+        isValid = false;
+      } else if (!phoneRegex.test(newService.phone)) {
+        newErrors.phone = 'Please enter a valid phone number';
+        isValid = false;
+      } else {
+        newErrors.phone = '';
+      }
+  
+      // Email validation
+      const emailRegex = /\S+@\S+\.\S+/;
+      if (!newService.email) {
+        newErrors.email = 'Email is required';
+        isValid = false;
+      } else if (!emailRegex.test(newService.email)) {
+        newErrors.email = 'Please enter a valid email';
+        isValid = false;
+      } else {
+        newErrors.email = '';
+      }
+  
+      // Message validation
+      if (!newService.requirements.trim()) {
+        newErrors.requirements = 'Please describe your requirements';
+        isValid = false;
+      } else {
+        newErrors.requirements = '';
+      }
+  
+      setErrors(newErrors);
+      return isValid;
+    };
+  
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setNewService(prev => ({
+          ...prev,
+          [name]: value
+        }));
+    
+        // Clear error when user types
+        if (errors[name as keyof typeof errors]) {
+          setErrors(prev => ({
+            ...prev,
+            [name]: ''
+          }));
+        }
+    }; 
+  
+    const handleServiceSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsSubmitting(true);
+  
+      if (validateForm()) {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/lead`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newService),
+          });
+  
+          if (response.ok) {
+            //router.push('/thank-you');
+            window.alert("Your service request has been submitted successfully. We will get back to you soon.");
+          } else {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Submission failed');
+          }
+        } catch (error: unknown) {
+          let errorMessage = 'Failed to submit inquiry';
+    
+          if (error instanceof Error) {
+            errorMessage = error.message;
+          } else if (typeof error === 'string') {
+            errorMessage = error;
+          }
+          console.error('Submission error:', error);
+          setErrors(prev => ({ ...prev, form: errorMessage }));
+        } finally {
+          setIsSubmitting(false);
+        }
+      } else {
+        setIsSubmitting(false);
+      }
+    };
+
   return (
     <div className="space-y-6">
-      {/* <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">My Services</h2>
-        <Button>Request New Service</Button>
-      </div> */}
+        <Button onClick={() => setIsModalOpen(true)}>Request New Service</Button>
+      </div>
+
+      {isModalOpen && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+          <h3 className="text-xl font-semibold mb-4">Request New Service</h3>
+      
+          {/* Example form */}
+          <form onSubmit={handleServiceSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium">Your Name</label>
+              <input
+                id="name"
+                name="name"
+                value={newService.name}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                disabled={isSubmitting}
+                required 
+                type="text" 
+                className="mt-1 w-full border border-gray-300 rounded p-2" 
+              />
+            </div>
+            <div>
+              <label htmlFor="phone" className="block text-sm font-bold text-gray-700 mb-1">Phone Number</label>
+              <input
+                id="phone"
+                name="phone"
+                value={newService.phone}
+                onChange={handleChange}
+                placeholder="Enter your phone number"
+                disabled={isSubmitting}
+                required
+                type="tel"
+                className="mt-1 w-full border border-gray-300 rounded p-2"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block text-sm font-bold text-gray-700 mb-1">
+                Email Address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={newService.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                disabled={isSubmitting}
+                className="mt-1 w-full border border-gray-300 rounded p-2"
+              />
+            </div>
+            <div>
+              <label htmlFor="requirements" className="block text-sm font-bold text-gray-700 mb-1">
+                Requirements
+              </label>
+              <Textarea
+                id="requirements"
+                name="requirements"
+                value={newService.requirements}
+                onChange={handleChange}
+                placeholder="Tell us about your requirements"
+                rows={4}
+                disabled={isSubmitting}
+              />
+            </div> 
+
+            <div className="flex justify-end gap-2">
+              <Button 
+                type="submit" 
+                className="bg-green-600 hover:bg-green-700"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center justify-center">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Submitting...
+                  </span>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" /> Submit Request
+                  </>
+                )}
+              </Button>
+              <Button variant="outline" onClick={() => setIsModalOpen(false)} disabled={isSubmitting}>
+                Cancel
+              </Button>
+            </div>                     
+          </form>
+
+          {/* Close button (X) */}
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+      )}
+
 
       <div className="grid gap-6">
         {services.map((service) => (
