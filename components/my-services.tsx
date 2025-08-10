@@ -73,7 +73,7 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
       try {
         setLoading(true);
         //window.alert("Fetching services for Email: " + customerEmail)
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/services/get/${customerEmail}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/services/get/${encodeURIComponent(customerEmail)}`);
 
         if (!response.ok) {
           //window.alert("Kuch ni mila")
