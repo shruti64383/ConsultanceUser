@@ -179,7 +179,7 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
           //const result = await response.json();
 
           if (response.ok) {
-            //window.alert("upload successful")
+            window.alert("upload successful")
           } else {
             ////window.alert("upload failed" + JSON.stringify(response))
             const errorData = await response.json();
