@@ -8,12 +8,14 @@ import { UploadDocuments } from "@/components/upload-documents"
 import { PaymentCompliance } from "@/components/payment-compliance"
 import { UserCalendar } from "@/components/user-calendar"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 export default function UserDashboard() {
   const [activeTab, setActiveTab] = useState("my-services")
   const [userEmail, setUserEmail] = useState("")
   const [userName, setUserName] = useState("")
   const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -26,9 +28,15 @@ export default function UserDashboard() {
         //window.alert("ye rhi body"+JSON.stringify(res.data))
         setUserEmail(res.data.user.email);
         setUserName(res.data.user.name);
-      } catch (error) {
+      } catch (error: any) {
         //window.alert("dikkat ho gayi user data fetch karte waqt")
-        console.error("Error fetching user data:", error);
+        //console.error("Error fetching user data:", error);
+        if (error.response?.status === 401) {
+        // Not logged in or token missing
+          router.push(`${process.env.NEXT_PUBLIC_BASE_URL}/login`); // redirect to login page
+        } else {
+          console.error("Error fetching user data:", error);
+        }
       } finally {
         setIsLoading(false) // Set loading to false when done
       }
