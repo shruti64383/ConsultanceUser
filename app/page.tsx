@@ -15,6 +15,7 @@ export default function UserDashboard() {
   const [userEmail, setUserEmail] = useState("")
   const [userName, setUserName] = useState("")
   const [isLoading, setIsLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const router = useRouter()
 
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function UserDashboard() {
         //window.alert("ye rhi body"+JSON.stringify(res.data))
         setUserEmail(res.data.user.email);
         setUserName(res.data.user.name);
+        setIsAuthenticated(true)
       } catch (error: any) {
         //window.alert("dikkat ho gayi user data fetch karte waqt")
         //console.error("Error fetching user data:", error);
@@ -43,7 +45,15 @@ export default function UserDashboard() {
     }
 
     fetchUserData();
-  }, [])
+  }, [router])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  if (!isAuthenticated) {
+    return null // ⛔ Don't render dashboard at all if not logged in
+  }
 
   const renderContent = () => {
     if (isLoading) {
