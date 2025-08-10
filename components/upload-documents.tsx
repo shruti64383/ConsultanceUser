@@ -395,7 +395,7 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
                       <Input
                         id="file-upload"
                         name="file-upload"
-                        // type="file"
+                        type="file"
                         // accept=".pdf"
                         onChange={(e) => {
                           const files = e.target.files;
