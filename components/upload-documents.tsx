@@ -216,12 +216,7 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
       }
 
         try {
-          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, {
-            formData,
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          });
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, formData );
 
           if (response.status === 200) {
             window.alert("upload successful")
