@@ -201,6 +201,8 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
           setUploadName("");
           //setErrors(prev => ({ ...prev, form: errorMessage }));
           setIsSubmitting(false);
+          fetchDocs();       
+          fetchDocuments();
         }
       };
 

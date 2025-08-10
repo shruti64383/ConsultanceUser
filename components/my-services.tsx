@@ -207,6 +207,13 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
           setErrors(prev => ({ ...prev, form: errorMessage }));
         } finally {
           setIsSubmitting(false);
+          setIsModalOpen(false);
+          setNewService({
+            name: "",
+            phone: "",
+            email: "",
+            requirements: ""
+          });     
         }
       } else {
         setIsSubmitting(false);
@@ -268,6 +275,7 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
                 placeholder="Enter your email"
                 disabled={isSubmitting}
                 className="mt-1 w-full border border-gray-300 rounded p-2"
+                required
               />
             </div>
             <div>
@@ -281,6 +289,7 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
                 onChange={handleChange}
                 placeholder="Tell us about your requirements"
                 rows={4}
+                required
                 disabled={isSubmitting}
               />
             </div> 
