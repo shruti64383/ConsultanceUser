@@ -229,9 +229,9 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
             const errorData = await response.data;
             throw new Error(errorData.message || 'Submission failed');
           }
-        } catch (error: unknown) {
+        } catch (error: any) {
           let errorMessage = 'Failed to submit inquiry';
-    
+          alert(`Upload failed: ${error.response?.data?.message || error.message}`);
           if (error instanceof Error) {
             errorMessage = error.message;
           } else if (typeof error === 'string') {
