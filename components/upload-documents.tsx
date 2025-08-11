@@ -222,20 +222,20 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-            // 'Authorization': `Bearer ${localStorage.getItem('token')}`
-          },
-          onUploadProgress: (progressEvent) => {
-            const percent = Math.round(
-              (progressEvent.loaded * 100) / (progressEvent.total || 1)
-            );
-            setProgress(percent);
-          },
-          timeout: 120000 // 2 minutes
-        }
+        formData
+        // {
+        //   headers: {
+        //     'Content-Type': 'multipart/form-data',
+        //     // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+        //   },
+        //   onUploadProgress: (progressEvent) => {
+        //     const percent = Math.round(
+        //       (progressEvent.loaded * 100) / (progressEvent.total || 1)
+        //     );
+        //     setProgress(percent);
+        //   },
+        //   timeout: 120000 // 2 minutes
+        //}
       );
 
       if (response.status === 201) {
