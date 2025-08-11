@@ -212,21 +212,32 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
       setIsSubmitting(true); 
       const formData = new FormData();
       if (file) {
+        window.alert("file mili hai")
         formData.append("file", file);
       }
 
         try {
+          window.alert("going to the url")
           const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, formData );
 
           if (response.status === 200) {
             window.alert("upload successful")
           } else {
+            window.alert("upload failed" + JSON.stringify(response))
             const errorData = await response.data;
             throw new Error(errorData.message || 'Submission failed');
           }
         } catch (error: any) {
           let errorMessage = 'Failed to submit inquiry';
           alert(`Upload failed: ${error.response?.data?.message || error.message}`);
+           // Enhanced error logging
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error details:", {
+        message: error.message,
+        code: error.code,
+        response: error.response?.data
+      });
+    }
           if (error instanceof Error) {
             errorMessage = error.message;
           } else if (typeof error === 'string') {
