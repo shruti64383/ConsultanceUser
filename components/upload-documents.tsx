@@ -40,9 +40,9 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
   const [file, setFile] = useState<File | null>(null);
   const [uploadName, setUploadName] = useState("");
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [loading, setLoading] = useState(true)
-
+  const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
       fetchDocs();
@@ -207,53 +207,49 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
   //       }
   //     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      setIsSubmitting(true); 
-      const formData = new FormData();
-      if (file) {
-        window.alert("file mili hai")
-        formData.append("file", file);
-      }
-
-        try {
-          window.alert("going to the url")
-          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, formData );
-
-          if (response.status === 200) {
-            window.alert("upload successful")
-          } else {
-            window.alert("upload failed" + JSON.stringify(response))
-            const errorData = await response.data;
-            throw new Error(errorData.message || 'Submission failed');
-          }
-        } catch (error: any) {
-          let errorMessage = 'Failed to submit inquiry';
-          alert(`Upload failed: ${error.response?.data?.message || error.message}`);
-           // Enhanced error logging
-    if (axios.isAxiosError(error)) {
-      console.error("Axios error details:", {
-        message: error.message,
-        code: error.code,
-        response: error.response?.data
-      });
-    }
-          if (error instanceof Error) {
-            errorMessage = error.message;
-          } else if (typeof error === 'string') {
-            errorMessage = error;
-          }
-          console.error('Submission error:', error);
-           
-        } finally {
-          setFile(null);
-          setUploadName("");
-          //setErrors(prev => ({ ...prev, form: errorMessage }));
-          setIsSubmitting(false);
-          fetchDocs();       
-          fetchDocuments();
+     const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!file) return alert('Please select a file');
+    if (file.size > 10 * 1024 * 1024) return alert('File too large (max 10MB)');
+    
+    setIsSubmitting(true);
+    setProgress(0);
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          onUploadProgress: (progressEvent) => {
+            const percent = Math.round(
+              (progressEvent.loaded * 100) / (progressEvent.total || 1)
+            );
+            setProgress(percent);
+          },
+          timeout: 120000 // 2 minutes
         }
-      };
+      );
+
+      if (response.status === 201) {
+        alert('Upload successful!');
+      }
+    } catch (error: any) {
+      console.error('Upload failed:', error);
+      alert(`Upload failed: ${error.response?.data?.message || error.message}`);
+    } finally {
+      setIsSubmitting(false);
+      setFile(null);
+      setUploadName('');
+    }
+  };
 
   // const uploadedDocuments = [
   //   {
@@ -403,14 +399,7 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
                         name="file-upload"
                         type="file"
                         // accept=".pdf"
-                        onChange={(e) => {
-                          const files = e.target.files;
-                          if (files && files.length > 0) {
-                            setFile(files[0]);
-                          } else {
-                            setFile(null);
-                          }
-                        }}
+                        onChange={(e) => setFile(e.target.files?.[0] || null)}
                         className="sr-only"
                         disabled={isSubmitting}
                       />
