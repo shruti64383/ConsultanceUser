@@ -159,97 +159,97 @@ export function UploadDocuments({ customerEmail, onBack }: ServiceProps) {
           }
   }; 
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //     e.preventDefault();
-  //     setIsSubmitting(true); 
-  //     const formData = new FormData();
-  //     if (file) {
-  //       formData.append('pdf', file);
-  //     }
-
-  //       try {
-  //         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, {
-  //           method: 'POST',
-  //           //headers: {
-  //           //   'Content-Type': 'application/json',
-  //           // 'Authorization': `Bearer ${userToken}`, // Assuming you have a userToken for authentication
-  //           // },
-  //           body: formData ,
-  //         });
-  
-  //         //const result = await response.json();
-
-  //         if (response.ok) {
-  //           window.alert("upload successful")
-  //         } else {
-  //           ////window.alert("upload failed" + JSON.stringify(response))
-  //           const errorData = await response.json();
-  //           //window.alert("upload failed" + JSON.stringify(response))
-  //           throw new Error(errorData.message || 'Submission failed');
-  //         }
-  //       } catch (error: unknown) {
-  //         let errorMessage = 'Failed to submit inquiry';
-    
-  //         if (error instanceof Error) {
-  //           errorMessage = error.message;
-  //         } else if (typeof error === 'string') {
-  //           errorMessage = error;
-  //         }
-  //         console.error('Submission error:', error);
-           
-  //       } finally {
-  //         setFile(null);
-  //         setUploadName("");
-  //         //setErrors(prev => ({ ...prev, form: errorMessage }));
-  //         setIsSubmitting(false);
-  //         fetchDocs();       
-  //         fetchDocuments();
-  //       }
-  //     };
-
-     const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!file) return alert('Please select a file');
-    if (file.size > 10 * 1024 * 1024) return alert('File too large (max 10MB)');
-    
-    setIsSubmitting(true);
-    setProgress(0);
-    
-    const formData = new FormData();
-    formData.append('file', file);
-    
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`,
-        formData
-        // {
-        //   headers: {
-        //     'Content-Type': 'multipart/form-data',
-        //     // 'Authorization': `Bearer ${localStorage.getItem('token')}`
-        //   },
-        //   onUploadProgress: (progressEvent) => {
-        //     const percent = Math.round(
-        //       (progressEvent.loaded * 100) / (progressEvent.total || 1)
-        //     );
-        //     setProgress(percent);
-        //   },
-        //   timeout: 120000 // 2 minutes
-        //}
-      );
-
-      if (response.status === 201) {
-        alert('Upload successful!');
+  const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setIsSubmitting(true); 
+      const formData = new FormData();
+      if (file) {
+        formData.append('file', file);
       }
-    } catch (error: any) {
-      console.error('Upload failed:', error);
-      alert(`Upload failed: ${error.response?.data?.message || error.message}`);
-    } finally {
-      setIsSubmitting(false);
-      setFile(null);
-      setUploadName('');
-    }
-  };
+
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`, {
+            method: 'POST',
+            //headers: {
+            //   'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${userToken}`, // Assuming you have a userToken for authentication
+            // },
+            body: formData ,
+          });
+  
+          //const result = await response.json();
+
+          if (response.ok) {
+            window.alert("upload successful")
+          } else {
+            ////window.alert("upload failed" + JSON.stringify(response))
+            const errorData = await response.json();
+            //window.alert("upload failed" + JSON.stringify(response))
+            throw new Error(errorData.message || 'Submission failed');
+          }
+        } catch (error: unknown) {
+          let errorMessage = 'Failed to submit inquiry';
+    
+          if (error instanceof Error) {
+            errorMessage = error.message;
+          } else if (typeof error === 'string') {
+            errorMessage = error;
+          }
+          console.error('Submission error:', error);
+           
+        } finally {
+          setFile(null);
+          setUploadName("");
+          //setErrors(prev => ({ ...prev, form: errorMessage }));
+          setIsSubmitting(false);
+          fetchDocs();       
+          fetchDocuments();
+        }
+      };
+
+  //    const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+    
+  //   if (!file) return alert('Please select a file');
+  //   if (file.size > 10 * 1024 * 1024) return alert('File too large (max 10MB)');
+    
+  //   setIsSubmitting(true);
+  //   setProgress(0);
+    
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+    
+  //   try {
+  //     const response = await axios.post(
+  //       `${process.env.NEXT_PUBLIC_API_URL}/api/documents/${customerEmail}/${uploadName}`,
+  //       formData
+  //       // {
+  //       //   headers: {
+  //       //     'Content-Type': 'multipart/form-data',
+  //       //     // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //       //   },
+  //       //   onUploadProgress: (progressEvent) => {
+  //       //     const percent = Math.round(
+  //       //       (progressEvent.loaded * 100) / (progressEvent.total || 1)
+  //       //     );
+  //       //     setProgress(percent);
+  //       //   },
+  //       //   timeout: 120000 // 2 minutes
+  //       //}
+  //     );
+
+  //     if (response.status === 201) {
+  //       alert('Upload successful!');
+  //     }
+  //   } catch (error: any) {
+  //     console.error('Upload failed:', error);
+  //     alert(`Upload failed: ${error.response?.data?.message || error.message}`);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //     setFile(null);
+  //     setUploadName('');
+  //   }
+  // };
 
   // const uploadedDocuments = [
   //   {
