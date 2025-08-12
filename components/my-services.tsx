@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, ChangeEvent, useEffect} from "react"
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -403,18 +404,17 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
                   
                                      {/* Upload Docs Button */}
                    <div className="flex justify-end pt-2">
-                     <Button 
-                       size="sm" 
-                       variant="outline"
-                       onClick={() => {
-                         // Navigate to upload-documents page
-                         window.location.href = '/upload-documents';
-                       }}
-                       className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-800 border-gray-300"
-                     >
+                                       <Link href="/upload-documents">
+                       <Button 
+                         size="sm" 
+                         variant="outline"
+                         className="flex items-center space-x-2 bg-blue-50 hover:bg-blue-100 text-blue-700 hover:text-blue-800 border-blue-200"
+                       >
                        <Upload className="h-4 w-4" />
-                       <span>Upload Docs</span>
-                     </Button>
+                         <span>Upload Documents</span>
+                       </Button>
+                     </Link>
+
                    </div>
                 </div>
               </CardContent>
