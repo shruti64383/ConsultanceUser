@@ -68,12 +68,12 @@ export function UserHeader({ userName, onBack }: UserProps) {
 
           {/* Welcome message with user avatar */}
           <div className="flex items-center space-x-3">
-            <Avatar className="h-10 w-10">
+            {/* <Avatar className="h-10 w-10">
               <AvatarImage src="/placeholder.svg?height=40&width=40" />
               <AvatarFallback className="text-lg font-semibold">
                 {userName ? userName.charAt(0).toUpperCase() : 'U'}
               </AvatarFallback> 
-            </Avatar>
+            </Avatar> */}
             <div className="text-right">
               <h2 className="text-xl font-medium text-gray-900">
                 👋 Welcome Back, <strong className="text-blue-600">{userName}</strong>
