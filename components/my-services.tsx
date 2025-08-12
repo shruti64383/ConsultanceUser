@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
-import { Eye, MessageCircle, Loader2, Send } from "lucide-react"
+import { Eye, MessageCircle, Loader2, Send, Package } from "lucide-react"
 
 interface ServiceProps {
   // customerId: Number
@@ -330,61 +330,81 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
 
 
       <div className="grid gap-6">
-        {services.map((service) => (
-          <Card key={service.serviceId.toLocaleString()} className="hover:shadow-md transition-shadow">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div>
-                  <CardTitle className="text-xl">{service.name}</CardTitle>
-                  <p className="text-sm text-gray-500 mt-1">Service ID: {service.serviceId.toLocaleString()}</p>
-                </div>
-                <div className="flex space-x-2">
-                  <Badge className={getStatusColor(service.status)}>{service.status}</Badge>
-                  {/* <Badge className={getPriorityColor(service.priority)}>{service.priority}</Badge> */}
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div>
-                  <div className="flex justify-between text-sm text-gray-600 mb-2">
-                    <span>Progress</span>
-                    <span>{service.progress.toLocaleString()}%</span>
-                  </div>
-                  <Progress value={Number(service.progress)} className="h-2" />
-                </div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+        {loading ? (
+          <div className="flex justify-center items-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <span className="ml-2 text-gray-500">Loading services...</span>
+          </div>
+        ) : services.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <div className="w-32 h-32 mb-6 flex items-center justify-center">
+              <Package className="w-full h-full text-gray-300 opacity-50" />
+            </div>
+            <h3 className="text-xl font-medium text-gray-500 mb-2">No Services Yet</h3>
+            <p className="text-gray-400 mb-6 max-w-md">
+              You haven't requested any services yet. Click the button above to get started with your first service request.
+            </p>
+            <Button onClick={() => setIsModalOpen(true)} className="bg-blue-600 hover:bg-blue-700">
+              Request Your First Service
+            </Button>
+          </div>
+        ) : (
+          services.map((service) => (
+            <Card key={service.serviceId.toLocaleString()} className="hover:shadow-md transition-shadow">
+              <CardHeader>
+                <div className="flex justify-between items-start">
                   <div>
-                    <p className="text-gray-500">Start Date</p>
-                    <p className="font-medium">{new Date(service.startDate).toISOString().split('T')[0]}</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Expected Completion</p>
-                    <p className="font-medium">{service.completedDate 
-                      ? new Date(service.completedDate).toISOString().split('T')[0] 
-                      : "00-00-0000"}
-                    </p>
-                  </div>
-                  {/* <div>
-                    <p className="text-gray-500">Assigned To</p>
-                    <p className="font-medium">{service.assignedTo}</p>
+                    <CardTitle className="text-xl">{service.name}</CardTitle>
+                    <p className="text-sm text-gray-500 mt-1">Service ID: {service.serviceId.toLocaleString()}</p>
                   </div>
                   <div className="flex space-x-2">
-                    <Button size="sm" variant="outline">
-                      <Eye className="h-4 w-4 mr-1" />
-                      View
-                    </Button>
-                    <Button size="sm" variant="outline">
-                      <MessageCircle className="h-4 w-4 mr-1" />
-                      Chat
-                    </Button>
-                  </div> */}
+                    <Badge className={getStatusColor(service.status)}>{service.status}</Badge>
+                    {/* <Badge className={getPriorityColor(service.priority)}>{service.priority}</Badge> */}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between text-sm text-gray-600 mb-2">
+                      <span>Progress</span>
+                      <span>{service.progress.toLocaleString()}%</span>
+                    </div>
+                    <Progress value={Number(service.progress)} className="h-2" />
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-500">Start Date</p>
+                      <p className="font-medium">{new Date(service.startDate).toISOString().split('T')[0]}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Expected Completion</p>
+                      <p className="font-medium">{service.completedDate 
+                        ? new Date(service.completedDate).toISOString().split('T')[0] 
+                        : "00-00-0000"}
+                      </p>
+                    </div>
+                    {/* <div>
+                      <p className="text-gray-500">Assigned To</p>
+                      <p className="font-medium">{service.assignedTo}</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button size="sm" variant="outline">
+                        <Eye className="h-4 w-4 mr-1" />
+                        View
+                      </Button>
+                      <Button size="sm" variant="outline">
+                        <MessageCircle className="h-4 w-4 mr-1" />
+                        Chat
+                      </Button>
+                      </div> */}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   )
