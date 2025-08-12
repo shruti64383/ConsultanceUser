@@ -47,7 +47,10 @@ export function UserSidebar({ activeTab, setActiveTab, collapsed }: UserSidebarP
                     : "text-gray-600 hover:bg-gray-50",
                 )}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className={cn(
+                  "transition-all duration-300",
+                  collapsed ? "h-6 w-6" : "h-5 w-5"
+                )} />
                 {!collapsed && <span className="font-medium">{item.label}</span>}
               </button>
             )
@@ -57,7 +60,10 @@ export function UserSidebar({ activeTab, setActiveTab, collapsed }: UserSidebarP
         {!collapsed && (
           <div className="mt-8 pt-4 border-t border-gray-200">
             <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left text-gray-600 hover:bg-gray-50 transition-colors">
-              <HelpCircle className="h-5 w-5" />
+              <HelpCircle className={cn(
+                "transition-all duration-300",
+                collapsed ? "h-6 w-6" : "h-5 w-5"
+              )} />
               <span className="font-medium">Help & Support</span>
             </button>
           </div>
