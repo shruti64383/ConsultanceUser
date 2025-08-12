@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, ChangeEvent, useEffect} from "react"
-import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
 import { Eye, MessageCircle, Loader2, Send, Package, Upload } from "lucide-react"
+import { UploadDocuments } from "@/components/upload-documents"
 
 interface ServiceProps {
   // customerId: Number
@@ -35,7 +35,8 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
   const [services, setServices] = useState<Services[]>([]);
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false);
-   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showUploadDocuments, setShowUploadDocuments] = useState(false);
   const [newService, setNewService] = useState({
       name: "",
       phone: "",
@@ -221,6 +222,11 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
       }
     };
 
+  // If showUploadDocuments is true, render the UploadDocuments component
+  if (showUploadDocuments) {
+    return <UploadDocuments customerEmail={customerEmail} onBack={() => setShowUploadDocuments(false)} />
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -403,17 +409,16 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
                   </div>
                   
                                      {/* Upload Docs Button */}
-                   <div className="flex justify-end pt-2">
-                                       <Link href="/upload-documents">
+                   <div className="flex justify-end pt-2"> 
                        <Button 
                          size="sm" 
                          variant="outline"
+                         onClick={() => setShowUploadDocuments(true)}
                          className="flex items-center space-x-2 bg-blue-50 hover:bg-blue-100 text-blue-700 hover:text-blue-800 border-blue-200"
                        >
                        <Upload className="h-4 w-4" />
                          <span>Upload Documents</span>
                        </Button>
-                     </Link>
 
                    </div>
                 </div>
