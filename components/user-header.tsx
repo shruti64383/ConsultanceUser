@@ -38,7 +38,8 @@ export function UserHeader({ userName, onBack }: UserProps) {
             </span>
           </Button> */}
 
-          <DropdownMenu>
+          {/* Commented out dropdown functionality as requested */}
+          {/* <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" className="flex items-center space-x-2">
                 <Avatar className="h-8 w-8">
@@ -48,7 +49,7 @@ export function UserHeader({ userName, onBack }: UserProps) {
                 <span className="text-sm font-medium">{userName}</span>
               </Button>
             </DropdownMenuTrigger>
-            {/* <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuItem>
                 <User className="mr-2 h-4 w-4" />
                 Profile
@@ -62,8 +63,23 @@ export function UserHeader({ userName, onBack }: UserProps) {
                 <LogOut className="mr-2 h-4 w-4" />
                 Logout
               </DropdownMenuItem>
-            </DropdownMenuContent> */}
-          </DropdownMenu>
+            </DropdownMenuContent>
+          </DropdownMenu> */}
+
+          {/* Welcome message with user avatar */}
+          <div className="flex items-center space-x-3">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src="/placeholder.svg?height=40&width=40" />
+              <AvatarFallback className="text-lg font-semibold">
+                {userName ? userName.charAt(0).toUpperCase() : 'U'}
+              </AvatarFallback> 
+            </Avatar>
+            <div className="text-right">
+              <h2 className="text-xl font-medium text-gray-900">
+                👋 Welcome Back, <strong className="text-blue-600">{userName}</strong>
+              </h2>
+            </div>
+          </div>
         </div>
       </div>
     </header>
