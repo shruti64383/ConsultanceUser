@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Progress } from "@/components/ui/progress"
-import { Eye, MessageCircle, Loader2, Send, Package } from "lucide-react"
+import { Eye, MessageCircle, Loader2, Send, Package, Upload } from "lucide-react"
 
 interface ServiceProps {
   // customerId: Number
@@ -400,6 +400,22 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
                       </Button>
                       </div> */}
                   </div>
+                  
+                                     {/* Upload Docs Button */}
+                   <div className="flex justify-end pt-2">
+                     <Button 
+                       size="sm" 
+                       variant="outline"
+                       onClick={() => {
+                         // Navigate to upload-documents page
+                         window.location.href = '/upload-documents';
+                       }}
+                       className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-800 border-gray-300"
+                     >
+                       <Upload className="h-4 w-4" />
+                       <span>Upload Docs</span>
+                     </Button>
+                   </div>
                 </div>
               </CardContent>
             </Card>
