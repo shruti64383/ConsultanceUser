@@ -27,7 +27,7 @@ export function UserHeader({ userName, onBack, onToggleSidebar }: UserProps) {
           <Button variant="ghost" size="sm" onClick={onToggleSidebar}>
             <Menu className="w-5 h-5" />
           </Button>
-          <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
+          {/* <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1> */}
         </div>
 
         <div className="flex items-center space-x-4">
