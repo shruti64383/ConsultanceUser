@@ -57,20 +57,23 @@ export function UserSidebar({ activeTab, setActiveTab, collapsed }: UserSidebarP
           })}
         </div>
 
-        {!collapsed && (
-          <div className="mt-8 pt-4 border-t border-gray-200">
-            <button 
-              onClick={() => setActiveTab("help-support")}
-              className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left text-gray-600 hover:bg-gray-50 transition-colors"
-            >
-              <HelpCircle className={cn(
-                "transition-all duration-300",
-                collapsed ? "h-6 w-6" : "h-5 w-5"
-              )} />
-              <span className="font-medium">Help & Support</span>
-            </button>
-          </div>
-        )}
+        <div className="mt-8 pt-4 border-t border-gray-200">
+          <button 
+            onClick={() => setActiveTab("help-support")}
+            className={cn(
+              "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors",
+              activeTab === "help-support"
+                ? "bg-blue-50 text-blue-700 border border-blue-200"
+                : "text-gray-600 hover:bg-gray-50"
+            )}
+          >
+            <HelpCircle className={cn(
+              "transition-all duration-300",
+              collapsed ? "h-6 w-6" : "h-5 w-5"
+            )} />
+            {!collapsed && <span className="font-medium">Help & Support</span>}
+          </button>
+        </div>
       </nav>
     </div>
   )
