@@ -235,8 +235,8 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
       </div>
 
       {isModalOpen && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md relative">
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-transparent">
+        <div className="bg-gray-100 rounded-lg shadow-lg p-6 w-full max-w-md relative">
           <h3 className="text-xl font-semibold mb-4">Request New Service</h3>
       
           {/* Example form */}
