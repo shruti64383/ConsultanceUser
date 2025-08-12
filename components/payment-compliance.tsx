@@ -110,8 +110,8 @@ export function PaymentCompliance() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-gray-900">Payment & Compliance</h2><br></br>
-        <h3 className="text-3xl font-bold text-gray-450">(This is sample/demo content)</h3>
+        <h2 className="text-3xl font-bold text-gray-900">Payment & Compliance</h2>
+        <h3 className="text-lg font-normal text-gray-500 mt-2">(This is sample/demo content)</h3>
       </div>
 
       {/* Payment Summary */}

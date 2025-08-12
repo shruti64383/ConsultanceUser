@@ -111,6 +111,7 @@ export function UserCalendar() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-bold text-gray-900">Calendar & Appointments</h2>
+        <h3 className="text-lg font-normal text-gray-500 mt-2">(This is sample/demo content)</h3>
         <Button>
           <Plus className="h-4 w-4 mr-2" />
           Schedule Appointment
