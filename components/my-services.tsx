@@ -385,13 +385,12 @@ export function MyServices({ customerEmail, onBack }: ServiceProps) {
                       <p className="text-gray-500">Start Date</p>
                       <p className="font-medium">{new Date(service.startDate).toISOString().split('T')[0]}</p>
                     </div>
-                    <div>
-                      <p className="text-gray-500">Expected Completion</p>
-                      <p className="font-medium">{service.completedDate 
-                        ? new Date(service.completedDate).toISOString().split('T')[0] 
-                        : "00-00-0000"}
-                      </p>
-                    </div>
+                    {service.completedDate && (
+                      <div>
+                        <p className="text-gray-500">Completion Date</p>
+                        <p className="font-medium">{new Date(service.completedDate).toISOString().split('T')[0]}</p>
+                      </div>
+                    )}
                     {/* <div>
                       <p className="text-gray-500">Assigned To</p>
                       <p className="font-medium">{service.assignedTo}</p>
