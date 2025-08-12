@@ -7,6 +7,7 @@ import { MyServices } from "@/components/my-services"
 import { UploadDocuments } from "@/components/upload-documents"
 import { PaymentCompliance } from "@/components/payment-compliance"
 import { UserCalendar } from "@/components/user-calendar"
+import { HelpSupport } from "@/components/help-support"
 import axios from "axios"
 import { useRouter } from "next/navigation"
 
@@ -70,6 +71,8 @@ export default function UserDashboard() {
         return <PaymentCompliance />
       case "calendar":
         return <UserCalendar />
+      case "help-support":
+        return <HelpSupport customerEmail={userEmail} onBack={() => setActiveTab("my-services")} />
       default:
         return <MyServices customerEmail={userEmail} onBack={() => {}} />
     }
