@@ -1,4 +1,4 @@
-import { Bell, Search, User, LogOut, Settings } from "lucide-react"
+import { Bell, Search, User, LogOut, Settings, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -15,19 +15,19 @@ interface UserProps {
   // customerName: string
   userName: string
   onBack: () => void
+  onToggleSidebar: () => void
 }
 
-export function UserHeader({ userName, onBack }: UserProps) {
+export function UserHeader({ userName, onBack, onToggleSidebar }: UserProps) {
   //window.alert("USERNAMEEEEE"+userName)
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <h1 className="text-2xl font-bold text-gray-900">Bharat Comply</h1>
-          {/* <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-            <Input placeholder="Search services..." className="pl-10 w-64" />
-          </div> */}
+          <Button variant="ghost" size="sm" onClick={onToggleSidebar}>
+            <Menu className="w-5 h-5" />
+          </Button>
+          <h1 className="text-xl font-semibold text-gray-900">Dashboard</h1>
         </div>
 
         <div className="flex items-center space-x-4">

@@ -16,6 +16,8 @@ export default function UserDashboard() {
   const [userName, setUserName] = useState("")
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [collapsed, setCollapsed] = useState(false)
+  const toggleSidebar = () => setCollapsed(!collapsed)
   const router = useRouter()
 
   useEffect(() => {
@@ -74,11 +76,11 @@ export default function UserDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <UserHeader userName={userName} onBack={() => {}}/>
-      <div className="flex">
-        <UserSidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-        <main className="flex-1 p-6">{renderContent()}</main>
+    <div className="flex h-screen bg-gray-50">
+      <UserSidebar activeTab={activeTab} setActiveTab={setActiveTab} collapsed={collapsed} />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <UserHeader userName={userName} onBack={() => {}} onToggleSidebar={toggleSidebar} />
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">{renderContent()}</main>
       </div>
     </div>
   )
